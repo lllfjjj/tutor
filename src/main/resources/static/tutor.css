@@ -79,3 +79,8 @@ button:disabled { opacity: .65; cursor: wait; }
 button.secondary, .button.secondary { background: var(--card); color: var(--accent); }
 .actions { display: flex; flex-wrap: wrap; align-items: center; gap: .65rem; }
 .question { margin: 1rem 0; }
+.question legend { padding: 0 .4rem; font-weight: 750; max-width: 100%; }
+.option { display: flex; align-items: baseline; gap: .45rem; padding: .2rem 0; cursor: pointer; }
+.option input { accent-color: var(--accent); }
+.success { color: var(--accent); font-weight: 700; }
+.error { color: var(--danger); font-weight: 700; }

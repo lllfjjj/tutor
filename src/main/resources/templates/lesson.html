@@ -24,12 +24,19 @@
     </section>
     <section>
         <h2 class="section-title">课后练习</h2>
-        <article class="card question" th:each="question, iteration : ${page.questions}">
-            <h3 th:text="${iteration.count} + '. ' + ${question.text}"></h3>
-            <ol type="A">
-                <li th:each="option : ${question.options}" th:text="${option.label}"></li>
-            </ol>
-        </article>
+        <p>每题只有一个正确选项，提交后查看解析。</p>
+        <form method="post" th:action="@{/lessons/{id}/attempts(id=${page.lesson.id})}">
+            <p class="error" role="alert" th:if="${formError}" th:text="${formError}"></p>
+            <fieldset class="card question" th:each="question, iteration : ${page.questions}">
+                <legend th:text="${iteration.count} + '. ' + ${question.text}"></legend>
+                <label class="option" th:each="option : ${question.options}">
+                    <input type="radio" required th:name="'answer-' + ${question.id}" th:value="${option.key}"
+                           th:checked="${selections != null and selections['answer-' + question.id] == option.key}">
+                    <span th:text="${option.key} + '. ' + ${option.label}"></span>
+                </label>
+            </fieldset>
+            <button type="submit">提交并查看解析</button>
+        </form>
     </section>
 </main>
 </body>
