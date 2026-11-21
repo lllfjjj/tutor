@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: head('学习进度')}"></head>
+<body>
+<header th:replace="~{layout :: header}"></header>
+<main class="container">
+    <div class="hero">
+        <p class="eyebrow">TUTOR / PROGRESS</p>
+        <h1>学习进度</h1>
+        <p class="lede">已完成 <strong th:text="${progress.completed} + ' / ' + ${progress.total}"></strong> 节
+            · <span th:text="${progress.percent} + '%'"></span>
+        </p>
+        <progress aria-label="课程完成率" max="100" th:value="${progress.percent}"></progress>
+        <p class="muted">完整提交一次课后练习即完成该课，重复练习不会重复计数。</p>
+    </div>
+    <h2 class="section-title">按路线查看</h2>
+    <div class="routes">
+        <section class="card" th:each="routeStatus : ${progress.routes}">
+            <h3 th:text="${routeStatus.route.track.label}"></h3>
+            <p class="muted" th:text="${routeStatus.completed()} + ' / ' + ${routeStatus.route.lessons.size()} + ' 节已完成'"></p>
+            <ol class="lesson-list">
+                <li th:each="lesson : ${routeStatus.route.lessons}">
+                    <a th:href="@{/lessons/{id}(id=${lesson.id})}" th:text="${lesson.title}"></a>
+                    <span class="badge" th:if="${routeStatus.completedIds.contains(lesson.id)}">已完成</span>
+                </li>
+            </ol>
+        </section>
+    </div>
+</main>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: head('错题本')}"></head>
+<body>
+<header th:replace="~{layout :: header}"></header>
+<main class="container reading">
+    <p class="eyebrow">TUTOR / REVIEW</p>
+    <h1>错题本</h1>
+    <p class="lede">每题只保留最近一次答错的记录。回到课程再做一遍，答对后这道题会自动移出。</p>
+    <div class="card" th:if="${mistakes.isEmpty()}">
+        <h2>暂无错题</h2>
+        <p>完成任意课程的一组练习，就能在这里回顾错题。</p>
+        <a th:href="@{/}">回到学习路线</a>
+    </div>
+    <article class="card question" th:each="mistake : ${mistakes}">
+        <p class="eyebrow" th:text="${mistake.lesson.title}"></p>
+        <h2 th:text="${mistake.prompt}"></h2>
+        <div class="actions">
+            <a class="button" th:href="@{/attempts/{id}(id=${mistake.attemptId})} + '#question-' + ${mistake.questionId}"
+               th:aria-label="'看这道题的解析：' + ${mistake.prompt}">看这道题的解析</a>
+            <a class="button secondary" th:href="@{/lessons/{id}(id=${mistake.lesson.id})}"
+               th:aria-label="'重做该课：' + ${mistake.lesson.title}">重做该课</a>
+        </div>
+    </article>
+</main>
+</body>
+</html>
