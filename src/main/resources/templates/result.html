@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: head('练习解析')}"></head>
+<body>
+<header th:replace="~{layout :: header}"></header>
+<main class="container reading">
+    <p class="eyebrow">课后练习 / 解析</p>
+    <h1 th:text="${result.lesson.title}"></h1>
+    <p class="lede">正确题数 <strong th:text="${result.score} + ' / ' + ${result.answers.size()}"></strong></p>
+    <div class="actions">
+        <a class="button" th:href="@{/lessons/{id}(id=${result.lesson.id})}">再练一次</a>
+        <a class="button secondary" th:href="@{/}">返回学习路线</a>
+    </div>
+    <section class="card question" th:each="answer, iteration : ${result.answers}">
+        <h2 th:text="${iteration.count} + '. ' + ${answer.prompt}"></h2>
+        <p th:class="${answer.correct ? 'success' : 'error'}" th:text="${answer.correct ? '回答正确' : '回答错误'}"></p>
+        <p>你的选择：<span th:text="${answer.selectedKey} + '. ' + ${answer.selectedLabel}"></span></p>
+        <p>正确答案：<span th:text="${answer.correctKey} + '. ' + ${answer.correctLabel}"></span></p>
+        <p><strong>解析：</strong><span th:text="${answer.explanation}"></span></p>
+        <p class="muted" th:if="${answer.source != null}">
+            考点参考（<span th:text="${answer.source.type.label}"></span>）：
+            <a th:href="${answer.source.url}" th:text="${answer.source.title}"></a>
+            · <a th:href="${answer.source.referenceUrl}">技术依据</a>
+        </p>
+    </section>
+</main>
+</body>
+</html>

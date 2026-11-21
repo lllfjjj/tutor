@@ -30,11 +30,19 @@ public class Catalog {
 	public LessonPage lesson(String lessonId) {
 		var lesson = requireLesson(lessonId);
 		var prompts = questions.findByLessonIdOrderById(lessonId).stream()
-				.map(question -> new Prompt(question.id, question.prompt, List.of(
-						new Option("A", question.optionA), new Option("B", question.optionB),
-						new Option("C", question.optionC))))
+				.map(Catalog::prompt)
 				.toList();
 		return new LessonPage(card(lesson), lesson.body, lesson.example, prompts);
+	}
+
+	public List<GradingQuestion> gradingQuestions(String lessonId) {
+		requireLesson(lessonId);
+		return questions.findByLessonIdOrderById(lessonId).stream()
+				.map(question -> new GradingQuestion(prompt(question), question.correctOption,
+						question.explanation, question.sourceType == null ? null : new Source(
+						SourceType.valueOf(question.sourceType), question.sourceTitle,
+						question.sourceUrl, question.referenceUrl)))
+				.toList();
 	}
 
 	private Lesson requireLesson(String lessonId) {
@@ -46,9 +54,32 @@ public class Catalog {
 		return new LessonCard(lesson.id, lesson.track, lesson.title, lesson.objective);
 	}
 
+	private static Prompt prompt(Question question) {
+		return new Prompt(question.id, question.prompt, List.of(
+				new Option("A", question.optionA), new Option("B", question.optionB),
+				new Option("C", question.optionC)));
+	}
+
+	public enum SourceType {
+		OFFICIAL_GUIDE("官方指南"), CANDIDATE_ACCOUNT("公开面经"), COMMUNITY("社区整理");
+
+		public final String label;
+
+		SourceType(String label) {
+			this.label = label;
+		}
+	}
+
 	public record Route(Track track, List<LessonCard> lessons) {}
 	public record LessonCard(String id, Track track, String title, String objective) {}
 	public record LessonPage(LessonCard lesson, String body, String example, List<Prompt> questions) {}
 	public record Prompt(long id, String text, List<Option> options) {}
 	public record Option(String key, String label) {}
+	public record GradingQuestion(Prompt prompt, String correctOption, String explanation, Source source) {
+		public String optionLabel(String key) {
+			return prompt.options().stream().filter(option -> option.key().equals(key))
+					.findFirst().orElseThrow().label();
+		}
+	}
+	public record Source(SourceType type, String title, String url, String referenceUrl) {}
 }

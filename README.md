@@ -21,6 +21,7 @@ $env:Path = "$env:JAVA_HOME\bin;$env:Path"
 
 - [Spring 官方 Thymeleaf 示例](https://github.com/spring-guides/gs-serving-web-content) 和 [Spring Petclinic](https://github.com/spring-projects/spring-petclinic)：参考 MVC 模板、静态资源与 H2 集成验证。
 - [roadmap.sh](https://github.com/nilbuild/developer-roadmap)：借鉴按主题组织学习路线、再逐步拆分成可完成项目的方式。
+- [QuizZz](https://github.com/oojorgeoo89/QuizZz)：参考免登录答题体验；独立实现判分与解析，不引入旧版前端或用户管理模块。
 - [JavaGuide](https://github.com/Snailclimb/JavaGuide)：补充 Java 与 Spring 面试考点。只参考主题，独立编写题目和示例；公开面经不视为公司官方真题。
 
 ## 协作
