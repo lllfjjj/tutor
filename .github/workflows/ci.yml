@@ -1,0 +1,32 @@
+name: Maven CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Verify (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@d1374f8ac74474200d16ef8ecee22c7ae7a51880
+        with:
+          distribution: temurin
+          java-version: '25'
+          cache: maven
+      - if: runner.os == 'Linux'
+        run: ./mvnw --batch-mode --no-transfer-progress verify
+      - if: runner.os == 'Windows'
+        run: .\mvnw.cmd --batch-mode --no-transfer-progress verify
