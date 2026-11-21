@@ -16,8 +16,10 @@
         <p class="eyebrow" th:text="${mistake.lesson.title}"></p>
         <h2 th:text="${mistake.prompt}"></h2>
         <div class="actions">
-            <a class="button" th:href="@{/attempts/{id}(id=${mistake.attemptId})} + '#question-' + ${mistake.questionId}">看这道题的解析</a>
-            <a class="button secondary" th:href="@{/lessons/{id}(id=${mistake.lesson.id})}">重做该课</a>
+            <a class="button" th:href="@{/attempts/{id}(id=${mistake.attemptId})} + '#question-' + ${mistake.questionId}"
+               th:aria-label="'看这道题的解析：' + ${mistake.prompt}">看这道题的解析</a>
+            <a class="button secondary" th:href="@{/lessons/{id}(id=${mistake.lesson.id})}"
+               th:aria-label="'重做该课：' + ${mistake.lesson.title}">重做该课</a>
         </div>
     </article>
 </main>

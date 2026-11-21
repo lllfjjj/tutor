@@ -35,3 +35,4 @@ $env:Path = "$env:JAVA_HOME\bin;$env:Path"
 从最新 `main` 创建 `codex/*` 分支，关联 GitHub Issue 发起 PR。
 Windows 和 Ubuntu 上的 Maven 验证均通过且差异检查完成后，使用 squash 合并。
 不要提交本地数据库、凭据或本机 IDE 配置。
+已发布的题目 ID 和对应的题干、选项、答案与解析保持不变，历史作答引用原题；后续需要更正时应保留旧版本。

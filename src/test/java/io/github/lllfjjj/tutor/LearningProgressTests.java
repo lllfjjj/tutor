@@ -32,7 +32,7 @@ class LearningProgressTests {
 		String first = submitJava("A");
 		mvc.perform(get("/mistakes")).andExpect(status().isOk())
 				.andExpect(content().string(containsString("LessonKey.equals")))
-				.andExpect(content().string(containsString(first)));
+				.andExpect(content().string(containsString("href=\"" + first + "#question-7\"")));
 		mvc.perform(get("/api/lessons/java-core")).andExpect(jsonPath("$.completed").value(true));
 		mvc.perform(get("/api/lessons/spring-backend")).andExpect(jsonPath("$.completed").value(false));
 
@@ -41,7 +41,9 @@ class LearningProgressTests {
 				.andExpect(content().string(containsString("暂无错题")))
 				.andExpect(content().string(not(containsString("LessonKey.equals"))));
 		mvc.perform(get("/progress")).andExpect(content().string(containsString("1 / 6")));
-		mvc.perform(get(first)).andExpect(status().isOk()).andExpect(content().string(containsString("2 / 3")));
+		mvc.perform(get(first)).andExpect(status().isOk())
+				.andExpect(content().string(containsString("2 / 3")))
+				.andExpect(content().string(containsString("id=\"question-7\"")));
 
 		String third = submitJava("C");
 		mvc.perform(get("/mistakes")).andExpect(content().string(containsString(third)))

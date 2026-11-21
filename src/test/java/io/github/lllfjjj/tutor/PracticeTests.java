@@ -63,6 +63,20 @@ class PracticeTests {
 		mvc.perform(get("/attempts/999999")).andExpect(status().isNotFound());
 	}
 
+	@Test
+	void rejectsCrossOriginBrowserSubmitBeforeWritingHistory() throws Exception {
+		mvc.perform(submit("dom-events").header("Origin", "http://localhost:3000")
+						.param("answer-4", "A").param("answer-5", "B").param("answer-6", "C"))
+				.andExpect(status().isForbidden());
+		mvc.perform(submit("dom-events").header("Sec-Fetch-Site", "cross-site")
+						.param("answer-4", "A").param("answer-5", "B").param("answer-6", "C"))
+				.andExpect(status().isForbidden());
+		assertThat(jdbc.queryForObject("select count(*) from attempt where lesson_id = 'dom-events'", Integer.class)).isZero();
+		mvc.perform(submit("dom-events").header("Origin", "http://localhost")
+						.param("answer-4", "A").param("answer-5", "B").param("answer-6", "C"))
+				.andExpect(status().isSeeOther());
+	}
+
 	private static MockHttpServletRequestBuilder submit(String lesson) {
 		return post("/lessons/{lessonId}/attempts", lesson);
 	}

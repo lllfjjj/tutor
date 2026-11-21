@@ -12,8 +12,9 @@
         <a class="button secondary" th:href="@{/}">返回学习路线</a>
         <a class="button secondary" th:href="@{/mistakes}">查看错题本</a>
     </div>
-    <section class="card question" th:each="answer, iteration : ${result.answers}" th:id="'question-' + ${answer.questionId}">
-        <h2 th:text="${iteration.count} + '. ' + ${answer.prompt}"></h2>
+    <section class="card question" th:each="answer, iteration : ${result.answers}" th:id="'question-' + ${answer.questionId}"
+             tabindex="-1" th:aria-labelledby="'prompt-' + ${answer.questionId}">
+        <h2 th:id="'prompt-' + ${answer.questionId}" th:text="${iteration.count} + '. ' + ${answer.prompt}"></h2>
         <p th:class="${answer.correct ? 'success' : 'error'}" th:text="${answer.correct ? '回答正确' : '回答错误'}"></p>
         <p>你的选择：<span th:text="${answer.selectedKey} + '. ' + ${answer.selectedLabel}"></span></p>
         <p>正确答案：<span th:text="${answer.correctKey} + '. ' + ${answer.correctLabel}"></span></p>
