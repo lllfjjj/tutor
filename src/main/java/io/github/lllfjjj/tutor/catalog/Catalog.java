@@ -1,0 +1,54 @@
+package io.github.lllfjjj.tutor.catalog;
+
+import java.util.Arrays;
+import java.util.List;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
+@Service
+public class Catalog {
+	private final LessonRepository lessons;
+	private final QuestionRepository questions;
+
+	Catalog(LessonRepository lessons, QuestionRepository questions) {
+		this.lessons = lessons;
+		this.questions = questions;
+	}
+
+	public List<Route> routes() {
+		var cards = lessons.findAllByOrderByPosition().stream().map(Catalog::card).toList();
+		return Arrays.stream(Track.values())
+				.map(track -> new Route(track, cards.stream().filter(card -> card.track() == track).toList()))
+				.toList();
+	}
+
+	public LessonCard summary(String lessonId) {
+		return card(requireLesson(lessonId));
+	}
+
+	public LessonPage lesson(String lessonId) {
+		var lesson = requireLesson(lessonId);
+		var prompts = questions.findByLessonIdOrderById(lessonId).stream()
+				.map(question -> new Prompt(question.id, question.prompt, List.of(
+						new Option("A", question.optionA), new Option("B", question.optionB),
+						new Option("C", question.optionC))))
+				.toList();
+		return new LessonPage(card(lesson), lesson.body, lesson.example, prompts);
+	}
+
+	private Lesson requireLesson(String lessonId) {
+		return lessons.findById(lessonId)
+				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "找不到这节课程"));
+	}
+
+	private static LessonCard card(Lesson lesson) {
+		return new LessonCard(lesson.id, lesson.track, lesson.title, lesson.objective);
+	}
+
+	public record Route(Track track, List<LessonCard> lessons) {}
+	public record LessonCard(String id, Track track, String title, String objective) {}
+	public record LessonPage(LessonCard lesson, String body, String example, List<Prompt> questions) {}
+	public record Prompt(long id, String text, List<Option> options) {}
+	public record Option(String key, String label) {}
+}

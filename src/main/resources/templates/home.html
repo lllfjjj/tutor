@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: head('学习路线')}"></head>
+<body>
+<header th:replace="~{layout :: header}"></header>
+<main class="container">
+    <div class="hero">
+        <p class="eyebrow">TUTOR / WEB DEVELOPMENT</p>
+        <h1>前后端学习助手</h1>
+        <p class="lede">从一张网页到一次完整请求。每节课包含一个示例和三道练习，学完就能检验自己。</p>
+    </div>
+    <h2 class="section-title">选择学习路线</h2>
+    <div class="routes">
+        <section class="card" th:each="route : ${routes}">
+            <span class="route-number" th:text="${route.track.number}">01</span>
+            <h3 th:text="${route.track.label}">前端基础</h3>
+            <p class="muted" th:text="${route.track.description}"></p>
+            <ol class="lesson-list">
+                <li th:each="lesson : ${route.lessons}">
+                    <a th:href="@{/lessons/{id}(id=${lesson.id})}" th:text="${lesson.title}"></a>
+                </li>
+            </ol>
+        </section>
+    </div>
+</main>
+</body>
+</html>

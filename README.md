@@ -15,6 +15,13 @@ $env:Path = "$env:JAVA_HOME\bin;$env:Path"
 ```
 
 首次运行 Maven Wrapper 需要联网获取 Maven 和依赖。无需另装 Maven、Node.js 或数据库。
+启动后访问 [本地 Tutor](http://127.0.0.1:8080)。课程和题目由 Flyway 初始化，数据保存在 `data/tutor.mv.db`。
+
+## 开源参考
+
+- [Spring 官方 Thymeleaf 示例](https://github.com/spring-guides/gs-serving-web-content) 和 [Spring Petclinic](https://github.com/spring-projects/spring-petclinic)：参考 MVC 模板、静态资源与 H2 集成验证。
+- [roadmap.sh](https://github.com/nilbuild/developer-roadmap)：借鉴按主题组织学习路线、再逐步拆分成可完成项目的方式。
+- [JavaGuide](https://github.com/Snailclimb/JavaGuide)：补充 Java 与 Spring 面试考点。只参考主题，独立编写题目和示例；公开面经不视为公司官方真题。
 
 ## 协作
 
