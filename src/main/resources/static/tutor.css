@@ -84,3 +84,6 @@ button.secondary, .button.secondary { background: var(--card); color: var(--acce
 .option input { accent-color: var(--accent); }
 .success { color: var(--accent); font-weight: 700; }
 .error { color: var(--danger); font-weight: 700; }
+.badge { background: var(--soft); color: var(--accent); border-radius: 2rem; padding: .1rem .45rem; font-size: .82rem; }
+progress { width: min(100%, 24rem); height: .95rem; accent-color: var(--accent); }
+:target { scroll-margin-top: 1rem; border-color: var(--accent); }

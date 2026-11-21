@@ -50,7 +50,7 @@ public class PracticeService {
 				.collect(Collectors.toMap(question -> question.prompt().id(), Function.identity()));
 		var answers = attempt.answers.stream().map(answer -> {
 			var question = questions.get(answer.questionId);
-			return new AnswerResult(question.prompt().text(), answer.selectedOption,
+			return new AnswerResult(answer.questionId, question.prompt().text(), answer.selectedOption,
 					question.optionLabel(answer.selectedOption), question.correctOption(),
 					question.optionLabel(question.correctOption()), answer.correct, question.explanation(), question.source());
 		}).toList();
@@ -60,6 +60,6 @@ public class PracticeService {
 	static final class InvalidSubmission extends RuntimeException {}
 
 	public record Result(Catalog.LessonCard lesson, long score, List<AnswerResult> answers) {}
-	public record AnswerResult(String prompt, String selectedKey, String selectedLabel, String correctKey,
+	public record AnswerResult(long questionId, String prompt, String selectedKey, String selectedLabel, String correctKey,
 							   String correctLabel, boolean correct, String explanation, Catalog.Source source) {}
 }

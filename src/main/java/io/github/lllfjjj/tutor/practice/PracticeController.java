@@ -17,10 +17,12 @@ import org.springframework.web.servlet.view.RedirectView;
 class PracticeController {
 	private final Catalog catalog;
 	private final PracticeService practice;
+	private final LearningProgress progress;
 
-	PracticeController(Catalog catalog, PracticeService practice) {
+	PracticeController(Catalog catalog, PracticeService practice, LearningProgress progress) {
 		this.catalog = catalog;
 		this.practice = practice;
+		this.progress = progress;
 	}
 
 	@PostMapping("/lessons/{lessonId}/attempts")
@@ -44,5 +46,17 @@ class PracticeController {
 	String result(@PathVariable long attemptId, Model model) {
 		model.addAttribute("result", practice.result(attemptId));
 		return "result";
+	}
+
+	@GetMapping("/mistakes")
+	String mistakes(Model model) {
+		model.addAttribute("mistakes", progress.mistakes());
+		return "mistakes";
+	}
+
+	@GetMapping("/progress")
+	String progress(Model model) {
+		model.addAttribute("progress", progress.overview());
+		return "progress";
 	}
 }

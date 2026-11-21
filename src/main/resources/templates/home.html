@@ -18,6 +18,7 @@
             <ol class="lesson-list">
                 <li th:each="lesson : ${route.lessons}">
                     <a th:href="@{/lessons/{id}(id=${lesson.id})}" th:text="${lesson.title}"></a>
+                    <span class="badge" th:if="${completedIds.contains(lesson.id)}">已完成</span>
                 </li>
             </ol>
         </section>
