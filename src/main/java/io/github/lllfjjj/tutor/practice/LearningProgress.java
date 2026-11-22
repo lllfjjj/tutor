@@ -34,12 +34,14 @@ public class LearningProgress {
 		var routes = catalog.routes().stream().map(route -> new RouteStatus(route, completedIds)).toList();
 		long completed = routes.stream().mapToLong(RouteStatus::completed).sum();
 		long total = routes.stream().mapToLong(route -> route.route().lessons().size()).sum();
-		return new Progress(routes, completed, total, total == 0 ? 0 : Math.round(completed * 100.0 / total));
+		var bankIds = catalog.bankIds();
+		long bankCompleted = bankIds.stream().filter(completedIds::contains).count();
+		return new Progress(routes, completed, total, total == 0 ? 0 : Math.round(completed * 100.0 / total),
+				bankCompleted, bankIds.size());
 	}
 
 	public List<Mistake> mistakes() {
-		Map<String, Catalog.LessonCard> lessons = catalog.routes().stream()
-				.flatMap(route -> route.lessons().stream())
+		Map<String, Catalog.LessonCard> lessons = catalog.allLessonCards().stream()
 				.collect(Collectors.toMap(Catalog.LessonCard::id, Function.identity()));
 		return attempts.latestMistakes().stream()
 				.map(item -> new Mistake(lessons.get(item.getLessonId()), item.getQuestionId(),
@@ -53,6 +55,7 @@ public class LearningProgress {
 		}
 	}
 
-	public record Progress(List<RouteStatus> routes, long completed, long total, long percent) {}
+	public record Progress(List<RouteStatus> routes, long completed, long total, long percent,
+						   long bankCompleted, long bankTotal) {}
 	public record Mistake(Catalog.LessonCard lesson, long questionId, long attemptId, String prompt) {}
 }

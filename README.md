@@ -19,9 +19,9 @@ $env:Path = "$env:JAVA_HOME\bin;$env:Path"
 
 ## 怎么学
 
-- 首页选择前端基础、Java 后端或前后端联调，共 6 节课程、18 道单选题。联调课可实际发起 200 和 404 请求。
-- 每节课读完示例后提交练习。结果页会给出判分和解析，Java 题还附有选题来源及技术依据。
-- 错题本跟踪每题最后一次作答；重做答对后移出。任意一节课第一次完整提交后计入进度。重启应用仍能继续学习。
+- 基础路线保留 6 节课程和 18 道课后题，联调课可实际发起 200 和 404 请求。
+- [面试题库](http://127.0.0.1:8080/question-bank) 新增 18 个专题、144 道题。按方向、专题名或题干关键词找题；每组 8 题，交卷后显示正确答案、解析、选题来源和技术依据。
+- 错题本涵盖基础题与专题题，答对后移出；学习进度分别统计基础课程和面试专题。现有 H2 数据库启动时增量迁移，不覆盖已有作答记录。
 
 ## 开源参考
 
@@ -29,6 +29,7 @@ $env:Path = "$env:JAVA_HOME\bin;$env:Path"
 - [roadmap.sh](https://github.com/nilbuild/developer-roadmap)：借鉴按主题组织学习路线、再逐步拆分成可完成项目的方式。
 - [QuizZz](https://github.com/oojorgeoo89/QuizZz)：参考免登录答题体验；独立实现判分与解析，不引入旧版前端或用户管理模块。
 - [JavaGuide](https://github.com/Snailclimb/JavaGuide)：补充 Java 与 Spring 面试考点。只参考主题，独立编写题目和示例；公开面经不视为公司官方真题。
+- [Front End Interview Handbook](https://github.com/yangshun/front-end-interview-handbook)、[微软技术面试指南](https://careers.microsoft.com/v2/global/en/hiring-tips/technical-interviewing.html) 和 [亚马逊软件开发面试指南](https://www.amazon.jobs/content/en-gb/how-we-hire/interview-prep/software-development-topics)：参考公开考点；官方指南、公开面经和社区整理不混标。
 
 ## 协作
 

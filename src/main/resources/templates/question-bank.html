@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: head('面试题库')}"></head>
+<body>
+<header th:replace="~{layout :: header}"></header>
+<main class="container">
+    <section class="hero">
+        <p class="eyebrow">TUTOR / INTERVIEW PRACTICE</p>
+        <h1>面试题库</h1>
+        <p class="lede"><strong th:text="${bankQuestionCount}"></strong> 道专题练习，覆盖前端、Java 后端和前后端联调。</p>
+        <p class="muted">题目围绕公开面试指南、候选人面经和社区题库的考点原创编写，并用技术文档校验。交卷后可查看考点参考、技术依据和答案解析。</p>
+    </section>
+    <form class="bank-filters" method="get" th:action="@{/question-bank}">
+        <label>学习方向
+            <select name="track">
+                <option value="">全部方向</option>
+                <option th:each="track : ${tracks}" th:value="${track.name()}" th:text="${track.label}"
+                        th:selected="${track == selectedTrack}"></option>
+            </select>
+        </label>
+        <label>题干或专题关键词
+            <input name="q" type="search" maxlength="80" th:value="${query}" placeholder="例如 HashMap、事件循环">
+        </label>
+        <div class="actions">
+            <button type="submit">筛选</button>
+            <a th:if="${selectedTrack != null or !query.isEmpty()}" th:href="@{/question-bank}">清除筛选</a>
+        </div>
+    </form>
+    <h2>专题列表 <span class="muted" th:text="'· ' + ${sets.size()} + ' 组'"></span></h2>
+    <p class="card" th:if="${sets.isEmpty()}">没有找到符合条件的专题。试试其他关键词或选择全部方向。</p>
+    <div class="routes">
+        <article class="card bank-card" th:each="set : ${sets}" th:with="lesson=${set.lesson}">
+            <p class="eyebrow" th:text="${lesson.track.label} + ' / ' + ${set.questionCount} + ' 题'"></p>
+            <h3><a th:href="@{/lessons/{id}(id=${lesson.id})}" th:text="${lesson.title}"></a></h3>
+            <p class="muted" th:text="${lesson.objective}"></p>
+            <p class="bank-state">
+                <span class="badge" th:if="${completedIds.contains(lesson.id)}">已完成</span>
+                <span class="muted" th:unless="${completedIds.contains(lesson.id)}">未练习</span>
+            </p>
+        </article>
+    </div>
+</main>
+</body>
+</html>

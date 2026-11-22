@@ -4,14 +4,20 @@
 <body>
 <header th:replace="~{layout :: header}"></header>
 <main class="container reading">
-    <p class="eyebrow"><a th:href="@{/}">学习路线</a> / <span th:text="${page.lesson.track.label}"></span></p>
+    <p class="eyebrow">
+        <a th:if="${page.lesson.questionBank}" th:href="@{/question-bank(track=${page.lesson.track})}">面试题库</a>
+        <a th:unless="${page.lesson.questionBank}" th:href="@{/}">学习路线</a>
+        / <span th:text="${page.lesson.track.label}"></span>
+    </p>
     <h1 th:text="${page.lesson.title}"></h1>
     <p class="lede" th:text="${page.lesson.objective}"></p>
     <section class="card">
         <h2>知识要点</h2>
         <p th:text="${page.body}"></p>
-        <h3>代码示例</h3>
-        <pre><code th:text="${page.example}"></code></pre>
+        <div th:unless="${#strings.isEmpty(page.example)}">
+            <h3>代码示例</h3>
+            <pre><code th:text="${page.example}"></code></pre>
+        </div>
         <div th:if="${page.lesson.id == 'fetch-demo'}" class="demo" id="fetch-demo">
             <h3>动手联调</h3>
             <div class="actions">
@@ -23,7 +29,7 @@
         </div>
     </section>
     <section>
-        <h2 class="section-title">课后练习</h2>
+        <h2 class="section-title" th:text="${page.lesson.questionBank ? '专题练习' : '课后练习'}"></h2>
         <p>每题只有一个正确选项，提交后查看解析。</p>
         <form method="post" th:action="@{/lessons/{id}/attempts(id=${page.lesson.id})}">
             <p class="error" role="alert" th:if="${formError}" th:text="${formError}"></p>
