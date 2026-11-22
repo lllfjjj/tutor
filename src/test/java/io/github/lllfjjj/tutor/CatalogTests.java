@@ -23,12 +23,15 @@ class CatalogTests {
 	@Test
 	void seedsThreeTracksSixLessonsAndEighteenQuestions() {
 		assertThat(jdbc.queryForObject("select count(distinct track) from lesson", Integer.class)).isEqualTo(3);
-		assertThat(jdbc.queryForObject("select count(*) from lesson", Integer.class)).isEqualTo(6);
-		assertThat(jdbc.queryForList("select count(*) from question group by lesson_id", Integer.class))
+		assertThat(jdbc.queryForObject("select count(*) from lesson where not is_question_bank", Integer.class)).isEqualTo(6);
+		assertThat(jdbc.queryForList("""
+				select count(*) from question join lesson on lesson.id = question.lesson_id
+				where not is_question_bank group by lesson_id
+				""", Integer.class))
 				.containsExactly(3, 3, 3, 3, 3, 3);
 		assertThat(jdbc.queryForObject("""
 				select count(*) from question join lesson on lesson.id = question.lesson_id
-				where track = 'JAVA' and source_type is not null and source_title <> ''
+				where track = 'JAVA' and not is_question_bank and source_type is not null and source_title <> ''
 				  and source_url like 'https://%' and reference_url like 'https://%'
 				""", Integer.class)).isEqualTo(6);
 	}

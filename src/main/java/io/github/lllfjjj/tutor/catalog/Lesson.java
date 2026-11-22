@@ -1,5 +1,6 @@
 package io.github.lllfjjj.tutor.catalog;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -14,4 +15,5 @@ class Lesson {
 	String objective;
 	String body;
 	String example;
+	@Column(name = "is_question_bank") boolean questionBank;
 }

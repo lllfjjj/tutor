@@ -12,6 +12,9 @@
         </p>
         <progress aria-label="课程完成率" max="100" th:value="${progress.percent}"></progress>
         <p class="muted">完整提交一次课后练习即完成该课，重复练习不会重复计数。</p>
+        <p>面试专题已完成 <strong th:text="${progress.bankCompleted} + ' / ' + ${progress.bankTotal}"></strong>
+            组 · <a th:href="@{/question-bank}">继续刷题</a>
+        </p>
     </div>
     <h2 class="section-title">按路线查看</h2>
     <div class="routes">

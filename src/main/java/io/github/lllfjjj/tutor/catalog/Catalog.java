@@ -2,6 +2,7 @@ package io.github.lllfjjj.tutor.catalog;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -17,10 +18,30 @@ public class Catalog {
 	}
 
 	public List<Route> routes() {
-		var cards = lessons.findAllByOrderByPosition().stream().map(Catalog::card).toList();
+		var cards = lessons.findByQuestionBankFalseOrderByPosition().stream().map(Catalog::card).toList();
 		return Arrays.stream(Track.values())
 				.map(track -> new Route(track, cards.stream().filter(card -> card.track() == track).toList()))
 				.toList();
+	}
+
+	public List<LessonCard> allLessonCards() {
+		return lessons.findAllByOrderByPosition().stream().map(Catalog::card).toList();
+	}
+
+	public List<String> bankIds() {
+		return lessons.bankIds();
+	}
+
+	public List<BankSet> bankSets(Track track, String query) {
+		String pattern = query.isEmpty() ? "" : "(?iu)" + Pattern.quote(query);
+		return lessons.bankSets(track, pattern).stream()
+				.map(row -> new BankSet(new LessonCard(row.getId(), row.getTrack(), row.getTitle(), row.getObjective(), true),
+						row.getQuestionCount()))
+				.toList();
+	}
+
+	public long bankQuestionCount() {
+		return questions.bankQuestionCount();
 	}
 
 	public LessonCard summary(String lessonId) {
@@ -51,7 +72,7 @@ public class Catalog {
 	}
 
 	private static LessonCard card(Lesson lesson) {
-		return new LessonCard(lesson.id, lesson.track, lesson.title, lesson.objective);
+		return new LessonCard(lesson.id, lesson.track, lesson.title, lesson.objective, lesson.questionBank);
 	}
 
 	private static Prompt prompt(Question question) {
@@ -71,7 +92,8 @@ public class Catalog {
 	}
 
 	public record Route(Track track, List<LessonCard> lessons) {}
-	public record LessonCard(String id, Track track, String title, String objective) {}
+	public record LessonCard(String id, Track track, String title, String objective, boolean questionBank) {}
+	public record BankSet(LessonCard lesson, long questionCount) {}
 	public record LessonPage(LessonCard lesson, String body, String example, List<Prompt> questions) {}
 	public record Prompt(long id, String text, List<Option> options) {}
 	public record Option(String key, String label) {}
